@@ -1,7 +1,7 @@
 package SQL::Type::Guess;
 use strict;
 use vars qw($VERSION);
-$VERSION= '0.01';
+$VERSION= '0.02';
 
 =head1 NAME
 
@@ -39,6 +39,30 @@ SQL::Type::Guess - guess an appropriate column type for a set of data
     #    value decimal(5,3),
     #    when date
     # )
+
+=cut
+
+=head1 METHODS
+
+=head2 C<< SQL:::Type::Guess->new( %OPTIONS ) >>
+
+  my $g= SQL::Type::Guess->new();
+
+Creates a new C<SQL::Type::Guess> instance. The following options are
+supported:
+
+=over 4
+
+=item B<column_type>
+
+Hashref of already known column types.
+
+=item B<column_map>
+
+Hashref mapping the combinations SQL type names
+to the resulting type name.
+
+=back
 
 =cut
 
