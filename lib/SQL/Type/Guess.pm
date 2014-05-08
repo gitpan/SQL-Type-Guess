@@ -1,7 +1,7 @@
 package SQL::Type::Guess;
 use strict;
 use vars qw($VERSION);
-$VERSION= '0.02';
+$VERSION= '0.03';
 
 =head1 NAME
 
@@ -9,24 +9,10 @@ SQL::Type::Guess - guess an appropriate column type for a set of data
 
 =head1 SYNOPSIS
 
-    {
-        fool => 1,
-        when => '20140401',
-        greeting => 'Hello',
-        value => '1.05'
-    },
-    {
-        fool => 0,
-        when => '20140402',
-        greeting => 'World',
-        value => '99.05'
-    },
-    {
-        fool => 0,
-        when => '20140402',
-        greeting => 'World',
-        value => '9.005'
-    },
+    my @data=(
+      { fool => 1, when => '20140401', greeting => 'Hello', value => '1.05'  },
+      { fool => 0, when => '20140402', greeting => 'World', value => '99.05' },
+      { fool => 0, when => '20140402', greeting => 'World', value => '9.005' },
     );
 
     my $g= SQL::Type::Guess->new();
@@ -34,10 +20,10 @@ SQL::Type::Guess - guess an appropriate column type for a set of data
 
     print $g->as_sql( table => 'test' );
     # create table test (
-    #    fool decimal(1,0),
-    #    greeting varchar(5),
-    #    value decimal(5,3),
-    #    when date
+    #    "fool" decimal(1,0),
+    #    "greeting" varchar(5),
+    #    "value" decimal(5,3),
+    #    "when" date
     # )
 
 =cut
@@ -147,11 +133,11 @@ sub guess_data_type {
         } elsif( $value =~ /^((?:19|20)\d\d)-?(0\d|1[012])-?([012]\d|3[01])$/) {
             $this_value_type= 'date';
             $pre= 8;
-        } elsif( $value =~ /^[+-]?(\d+)$/) {
+        } elsif( $value =~ /^\s*[+-]?(\d+)\s*$/) {
             $this_value_type= 'decimal';
             $pre= length( $1 );
             $post= 0;
-        } elsif( $value =~ /^[+-]?(\d+)\.(\d+)$/) {
+        } elsif( $value =~ /^\s*[+-]?(\d+)\.(\d+)\s*$/) {
             $this_value_type= 'decimal';
             $pre= length( $1 );
             $post= length( $2 );
